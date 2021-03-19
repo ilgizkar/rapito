@@ -192,7 +192,7 @@
         }),
         created() {
             axios.get('/getUser')
-                .then(res => this.avatar = res.data.avatar)
+                .then(res => res.data.avatar ? this.avatar = res.data.avatar : '')
         }
     }
 </script>
