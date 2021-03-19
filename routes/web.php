@@ -19,4 +19,5 @@ Route::post('/allCities', 'HomeController@allCities');
 Route::get('/a', 'HomeController@a');
 Route::get('/b', 'HomeController@searchAllUsersInGroups');
 
+
 Route::get('/dashboard/{any}', 'HomeController@index');
