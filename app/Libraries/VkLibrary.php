@@ -36,7 +36,7 @@ class VkLibrary
         $v = config('services.vkontakte.v');
         $client_id = config('services.vkontakte.client_id');
         $url = 'https://oauth.vk.com/authorize?client_id='.$client_id.'&display=page&redirect_uri='.$redirect.'&scope='.$scopes.'&response_type=token&v='.$v;
-        file_get_contents($url);
+        return redirect()->away($url);
     }
 
     public static function getUserMethod($method_name, $params, $user, $type = null)
