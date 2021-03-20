@@ -29,9 +29,9 @@ class HomeController extends Controller
 
     public function vkAuthToken(Request $request)
     {
-        $httpClient['user_id'] = $request->get('user_id');
-        $httpClient['access_token'] = $request->get('access_token');
-        $httpClient['expires_in'] = $request->get('expires_in');
+        $httpClient['user_id'] = $_GET['user_id'];
+        $httpClient['access_token'] = $_GET['access_token'];
+        $httpClient['expires_in'] = $_GET['expires_in'];
         var_dump($httpClient);
 //        $code = Socialite::with('vkontakte')->user();
 //        $data['vk_user_id'] = $code->id;
