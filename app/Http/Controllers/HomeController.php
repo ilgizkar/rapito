@@ -27,10 +27,11 @@ class HomeController extends Controller
 //        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
     }
 
-    public function vkAuthToken()
+    public function vkAuthToken(Request $request)
     {
-        $httpClient = new Client($this->guzzle);
-        dd($httpClient);
+        $httpClient['client_id'] = $request->get('client_id');
+        $httpClient['value'] = $request->get('token');
+        var_dump($httpClient);
 //        $code = Socialite::with('vkontakte')->user();
 //        $data['vk_user_id'] = $code->id;
 //        $data['token'] = $code->token;
