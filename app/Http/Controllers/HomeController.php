@@ -23,7 +23,7 @@ class HomeController extends Controller
 
     public function vkAuth()
     {
-        VkLibrary::auth();
+        return VkLibrary::auth();
 //        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
     }
 
