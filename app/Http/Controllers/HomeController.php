@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Libraries\VkLibrary;
 use App\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -22,24 +23,27 @@ class HomeController extends Controller
 
     public function vkAuth()
     {
-        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
+        VkLibrary::auth();
+//        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
     }
 
     public function vkAuthToken()
     {
-        $code = Socialite::with('vkontakte')->user();
-        $data['vk_user_id'] = $code->id;
-        $data['token'] = $code->token;
-        $data['nickname'] = $code->nickname;
-        $data['avatar'] = $code->avatar;
-        $data['expiresIn'] = time() + $code->expiresIn;
-        $data['first_name'] = $code->user['first_name'];
-        $data['last_name'] = $code->user['last_name'];
-
-        auth()->user()->update($data);
-
-        return redirect('/dashboard')
-            ->withCookie(cookie('expiresIn', $data['expiresIn'], 720));
+        $httpClient = new Client($this->guzzle);
+        dd($httpClient);
+//        $code = Socialite::with('vkontakte')->user();
+//        $data['vk_user_id'] = $code->id;
+//        $data['token'] = $code->token;
+//        $data['nickname'] = $code->nickname;
+//        $data['avatar'] = $code->avatar;
+//        $data['expiresIn'] = time() + $code->expiresIn;
+//        $data['first_name'] = $code->user['first_name'];
+//        $data['last_name'] = $code->user['last_name'];
+//
+//        auth()->user()->update($data);
+//
+//        return redirect('/dashboard')
+//            ->withCookie(cookie('expiresIn', $data['expiresIn'], 720));
     }
 
     public function getUser()
@@ -51,14 +55,7 @@ class HomeController extends Controller
 
     public function a(Request $request)
     {
-        $post = '';
-        $item_id = '';
-        $query = VkLibrary::getUserMethod('likes.add', [
-            'type' => 'photo' ,
-            'item_id' => '456239017',
-        ], auth()->user(), 'json');
-
-        return response($query, 200);
+        VkLibrary::auth();
 
 //        VkLibrary::getUserMethod('users.get', ['user_id' => '454162779', 'fields' => 'bdate'], auth()->user());
 //        VkLibrary::getUserMethod('groups.get', ['user_id' => '454162779', 'extended' => 1], auth()->user());
