@@ -55,7 +55,7 @@ class HomeController extends Controller
         $item_id = '';
         $query = VkLibrary::getUserMethod('likes.add', [
             'type' => 'photo' ,
-            'item_id' => 'photo454162779_456239017',
+            'item_id' => '456239017',
         ], auth()->user(), 'json');
 
         return response($query, 200);
