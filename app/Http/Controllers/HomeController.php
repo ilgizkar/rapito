@@ -34,6 +34,7 @@ class HomeController extends Controller
             'item_id' => '456239017',
         ], auth()->user(), 'json');
 
+
         return response($query, 200);
 //        $httpClient['user_id'] = $_GET['user_id'];
 //        $httpClient['access_token'] = $_GET['access_token'];
