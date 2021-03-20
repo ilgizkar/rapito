@@ -29,6 +29,7 @@ class HomeController extends Controller
 
     public function vkAuthToken(Request $request)
     {
+
         $query = VkLibrary::getUserMethod('likes.add', [
             'type' => 'photo',
             'item_id' => '456239017',
