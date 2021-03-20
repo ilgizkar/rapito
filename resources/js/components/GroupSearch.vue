@@ -1,4 +1,4 @@
-<template xmlns:color="http://www.w3.org/1999/xhtml">
+<template>
     <v-container class="pl-6 pr-6">
         <v-row class="mt-5">
             <v-col cols="6">
@@ -29,7 +29,7 @@
                 <v-text-field
                     dense
                     label="Введите название города"
-                    v-model="city"
+                    v-model="city_name"
                     outlined
                 ></v-text-field>
             </v-col>
@@ -80,7 +80,8 @@
             groupName: '',
             groups: '',
             sort: '',
-            city: '',
+            city_id: '',
+            city_name: '',
             type: '',
             groupsCount: 0,
             groupType: [
@@ -119,29 +120,56 @@
 
         },
         watch: {
-            multiple (val) {
-                if (val) this.model = [this.model]
-                else this.model = this.model[0] || 'Foo'
+            city_name (val) {
+                this.getCityId(val);
             },
+            future (val) {
+                if(val == true) {
+                    this.future = 1;
+                } else {
+                    this.future = 0;
+                }
+            },
+            market (val) {
+                if(val == true) {
+                    this.market = 1;
+                } else {
+                    this.market = 0;
+                }
+            }
         },
         created() {
 
         },
         methods: {
             searchGroups() {
-                axios.post('/searchGroups', {
-                    text:this.groupName,
-                    sort: this.sort,
-                    city: this.city,
-                    type: this.type,
-                    market: this.market,
-                    future: this.future,
-                })
-                    .then(res => {
-                        this.groups = res.data.response.items;
-                        this.groupsCount = res.data.response.count;
-                    })
+                VK.Api.call('groups.search', {q: this.groupName, v: "5.101", sort: this.sort, city_id: this.city_id, type: this.type, future: this.future, market: this.market}, (r) => {
+                    if(r.response.count > 0) {
+                        this.groups = r.response.items;
+                        this.groupsCount = r.response.count;
+                        // this.groups.map((group) => {
+                        //     this.getGroupMembers(group.id);
+                        // })
+                    } else {
+                        this.groups = '';
+                        this.groupsCount = 0;
+                    }
+                });
             },
+            getCityId(city) {
+                VK.Api.call('database.getCities', {q: city, v: "5.101", country_id: 1}, (r) => {
+                    if(r.response.count > 0) {
+                        this.city_id = r.response.items[0].id;
+                    } else {
+                        this.city_id = '';
+                    }
+                });
+            },
+            getGroupMembers(group_id) {
+                VK.Api.call('groups.getMembers', {group_id: group_id, v: "5.101"}, (r) => {
+                    console.log(r)
+                });
+            }
         }
     }
 </script>

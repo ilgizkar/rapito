@@ -23,8 +23,7 @@ class HomeController extends Controller
 
     public function vkAuth()
     {
-        return VkLibrary::auth();
-//        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
+
     }
 
     public function vkAuthToken(Request $request)
@@ -35,19 +34,6 @@ class HomeController extends Controller
         $httpClient['access_token'] = $_GET['access_token'];
         $httpClient['expires_in'] = $_GET['expires_in'];
         var_dump($httpClient);
-//        $code = Socialite::with('vkontakte')->user();
-//        $data['vk_user_id'] = $code->id;
-//        $data['token'] = $code->token;
-//        $data['nickname'] = $code->nickname;
-//        $data['avatar'] = $code->avatar;
-//        $data['expiresIn'] = time() + $code->expiresIn;
-//        $data['first_name'] = $code->user['first_name'];
-//        $data['last_name'] = $code->user['last_name'];
-//
-//        auth()->user()->update($data);
-//
-//        return redirect('/dashboard')
-//            ->withCookie(cookie('expiresIn', $data['expiresIn'], 720));
     }
 
     public function getUser()
