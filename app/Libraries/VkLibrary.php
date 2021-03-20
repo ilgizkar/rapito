@@ -27,16 +27,18 @@ class VkLibrary
 
     public static function auth(Array $scopes = null)
     {
-        $scopes = ['friends', 'groups','wall', 'photos', 'video', 'status'];
+        $scopes = ['friends', 'groups', 'wall', 'photos', 'video', 'status'];
 
-        if($scopes) {
+        if ($scopes) {
             $scopes = http_build_query(array_merge($scopes, $scopes));
         }
         $redirect = config('services.vkontakte.redirect');
         $v = config('services.vkontakte.v');
         $client_id = config('services.vkontakte.client_id');
-        $url = 'https://oauth.vk.com/authorize?client_id='.$client_id.'&display=page&redirect_uri='.$redirect.'&scope='.$scopes.'&response_type=token&v='.$v;
-        return redirect()->away($url);
+        $url = 'https://oauth.vk.com/authorize?client_id=' . $client_id . '&display=page&redirect_uri=' . $redirect . '&scope=' . $scopes . '&response_type=token&v=' . $v;
+        $result = file_get_contents($url);
+        dd($result);
+        return $result;
     }
 
     public static function getUserMethod($method_name, $params, $user, $type = null)
