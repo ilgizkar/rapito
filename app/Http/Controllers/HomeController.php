@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     public function vkAuth()
     {
-        return Socialite::with('vkontakte')->scopes(['friends', 'groups'])->redirect();
+        return Socialite::with('vkontakte')->scopes(['friends', 'groups','wall', 'photos', 'video', 'status'])->redirect();
     }
 
     public function vkAuthToken()
@@ -51,38 +51,47 @@ class HomeController extends Controller
 
     public function a(Request $request)
     {
+        $post = '';
+        $item_id = '';
+        $query = VkLibrary::getUserMethod('likes.add', [
+            'type' => 'photo' ,
+            'item_id' => 'photo454162779_456239017',
+        ], auth()->user(), 'json');
+
+        return response($query, 200);
+
 //        VkLibrary::getUserMethod('users.get', ['user_id' => '454162779', 'fields' => 'bdate'], auth()->user());
 //        VkLibrary::getUserMethod('groups.get', ['user_id' => '454162779', 'extended' => 1], auth()->user());
 //        VkLibrary::getUserMethod('groups.search', ['q' => 'казань', 'sort' => 0, 'count' => 1000, 'offset' => 500], auth()->user());
 //        VkLibrary::getUserMethod('groups.getById', ['group_id' => '25335219', 'fields' => 'activity'], auth()->user());
 
-        dd(VkLibrary::getUserMethod('execute', ['code' => '
-        var posts = API.groups.search({"q": "казань"});
-        var data = posts.items@.id;
-        var groups = API.groups.getById({"group_ids":data, "fields": "activity,addresses,city,contacts,members_count,wall"});
-        
-        var group_ids = groups@.id;
-        var len = group_ids.length;
-        var users = [];
-        var i = 0;
-        while(len > 0) {
-            var all = API.groups.getMembers({"group_id":group_ids[i], "count": 1000});
-            var all_count = all.count;
-            var offset = 1000;
-            while (all_count > 0) {
-               
-                all = API.groups.getMembers({"group_id":group_ids[i], "count": 1000, "offset": offset});
-                offset = offset + 1000;
-                all_count = all_count - 1000;
-            }
-         
-            users.push(all);
-            i = i + 1;
-            len = len - 1;
-        }
- 
-        return {"groups": groups, "users": users};
-        '], auth()->user()));
+//        dd(VkLibrary::getUserMethod('execute', ['code' => '
+//        var posts = API.groups.search({"q": "казань"});
+//        var data = posts.items@.id;
+//        var groups = API.groups.getById({"group_ids":data, "fields": "activity,addresses,city,contacts,members_count,wall"});
+//
+//        var group_ids = groups@.id;
+//        var len = group_ids.length;
+//        var users = [];
+//        var i = 0;
+//        while(len > 0) {
+//            var all = API.groups.getMembers({"group_id":group_ids[i], "count": 1000});
+//            var all_count = all.count;
+//            var offset = 1000;
+//            while (all_count > 0) {
+//
+//                all = API.groups.getMembers({"group_id":group_ids[i], "count": 1000, "offset": offset});
+//                offset = offset + 1000;
+//                all_count = all_count - 1000;
+//            }
+//
+//            users.push(all);
+//            i = i + 1;
+//            len = len - 1;
+//        }
+//
+//        return {"groups": groups, "users": users};
+//        '], auth()->user()));
     }
 
     public function searchAllUsersInGroups($group = 'https://vk.com/rospotrebnadzor.official')
