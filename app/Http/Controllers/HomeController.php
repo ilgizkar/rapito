@@ -30,17 +30,11 @@ class HomeController extends Controller
     public function vkAuthToken(Request $request)
     {
 
-        $query = VkLibrary::getUserMethod('likes.add', [
-            'type' => 'photo',
-            'item_id' => '456239017',
-        ], auth()->user(), 'json');
 
-
-        return response($query, 200);
-//        $httpClient['user_id'] = $_GET['user_id'];
-//        $httpClient['access_token'] = $_GET['access_token'];
-//        $httpClient['expires_in'] = $_GET['expires_in'];
-//        var_dump($httpClient);
+        $httpClient['user_id'] = $_GET['user_id'];
+        $httpClient['access_token'] = $_GET['access_token'];
+        $httpClient['expires_in'] = $_GET['expires_in'];
+        var_dump($httpClient);
 //        $code = Socialite::with('vkontakte')->user();
 //        $data['vk_user_id'] = $code->id;
 //        $data['token'] = $code->token;
@@ -66,6 +60,14 @@ class HomeController extends Controller
     public function a(Request $request)
     {
 //        VkLibrary::auth();
+
+        $query = VkLibrary::getUserMethod('likes.add', [
+            'type' => 'photo',
+            'item_id' => '456239017',
+        ], auth()->user(), 'json');
+
+
+        return response($query, 200);
 
 //        VkLibrary::getUserMethod('users.get', ['user_id' => '454162779', 'fields' => 'bdate'], auth()->user());
 //        VkLibrary::getUserMethod('groups.get', ['user_id' => '454162779', 'extended' => 1], auth()->user());
