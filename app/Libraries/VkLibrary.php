@@ -22,6 +22,7 @@ class VkLibrary
         $this->v = config('services.vkontakte.v');
         $this->access_token = $user->token;
         $url = 'https://api.vk.com/method/users.get?user_ids=210700286&fields=bdate&access_token=533bacf01e11f55b536a565b57531ac114461ae8736d6506a3&v=5.107';
+        return redirect()->away($url);
     }
 
     public static function auth(Array $scopes = null)
