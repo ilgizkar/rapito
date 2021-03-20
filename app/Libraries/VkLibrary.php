@@ -28,6 +28,7 @@ class VkLibrary
     public static function auth(Array $scopes = null)
     {
         $scopes = ['friends', 'groups','wall', 'photos', 'video', 'status'];
+
         if($scopes) {
             $scopes = http_build_query(array_merge($scopes, $scopes));
         }
