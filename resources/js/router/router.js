@@ -5,10 +5,12 @@ Vue.use(VueRouter);
 
 import App from "../components/App";
 import GroupSearch from "../components/GroupSearch";
+import Enlarge from "../components/Enlarge";
 
 const routes = [
     { path: '/dashboard', component: App},
-    { path: '/dashboard/group_search', component: GroupSearch},
+    { path: '/dashboard/poisk_grup_vk', component: GroupSearch},
+    { path: '/dashboard/nakrutka_vk', component: Enlarge},
 ];
 
 
@@ -18,16 +20,16 @@ const router = new VueRouter({
     mode: 'history'
 });
 
-router.beforeResolve((to, from, next) => {
-    if (to.name) {
-        NProgress.start()
-    }
-    next()
-});
+// router.beforeResolve((to, from, next) => {
+//     if (to.name) {
+//         NProgress.start()
+//     }
+//     next()
+// });
 
-router.afterEach((to, from) => {
-    NProgress.done()
-});
+// router.afterEach((to, from) => {
+//     NProgress.done()
+// });
 
 
 export default router

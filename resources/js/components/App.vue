@@ -7,28 +7,8 @@
         >
             <v-list dense>
                 <template v-for="item in items">
-                    <v-row
-                        v-if="item.heading"
-                        :key="item.heading"
-                        align="center"
-                    >
-                        <v-col cols="6">
-                            <v-subheader v-if="item.heading">
-                                {{ item.heading }}
-                            </v-subheader>
-                        </v-col>
-                        <v-col
-                            cols="6"
-                            class="text-center"
-                        >
-                            <a
-                                href="#!"
-                                class="body-2 black--text"
-                            >EDIT</a>
-                        </v-col>
-                    </v-row>
                     <v-list-group
-                        v-else-if="item.children"
+                        v-if="item.children"
                         :key="item.text"
                         v-model="item.model"
                         :prepend-icon="item.model ? item.icon : item['icon-alt']"
@@ -157,6 +137,7 @@
             dialog: false,
             drawer: null,
             vk_session: null,
+            window_focus: null,
             user: null,
             userItems: [
                 { title: 'Профиль', click: 'logoutUser' },
@@ -165,28 +146,29 @@
                 { title: 'Выйти', click: 'logoutUser' },
             ],
             items: [
-                { icon: 'mdi-contacts', text: 'Поиск по группам' , to: '/dashboard/group_search'},
-                { icon: 'mdi-history', text: 'Frequently contacted' , to: '/group_search'},
-                { icon: 'mdi-content-copy', text: 'Duplicates' , to: '/group_search'},
+                { icon: 'mdi-contacts', text: 'Поиск по группам' , to: '/dashboard/poisk_grup_vk'},
+                { icon: 'mdi-history', text: 'Накрутка' , to: '/dashboard/nakrutka_vk'},
+                { icon: 'mdi-content-copy', text: 'Поиск участников' , to: '/group_search'},
                 {
                     icon: 'mdi-chevron-up',
                     'icon-alt': 'mdi-chevron-down',
-                    text: 'Labels',
+                    text: 'yyy',
                     to: '/group_search',
                     model: true,
                     children: [
-                        { icon: 'mdi-plus', text: 'Create label' , to: '/group_search'},
+                        { icon: 'mdi-plus', text: 'Лайков' , to: '/group_search'},
+                        { icon: 'mdi-plus', text: 'Репостов' , to: '/group_search'},
                     ],
                 },
                 {
                     icon: 'mdi-chevron-up',
                     'icon-alt': 'mdi-chevron-down',
-                    text: 'More',
+                    text: 'rrrr',
                     to: '/group_search',
                     model: false,
                     children: [
-                        { text: 'Import' , to: '/group_search'},
-                        { text: 'Export' , to: '/group_search'},
+                        { text: 'Лайков' , to: '/group_search'},
+                        { text: 'Репостов' , to: '/group_search'},
                         { text: 'Print' , to: '/group_search'},
                         { text: 'Undo changes' , to: '/group_search'},
                         { text: 'Other contacts' , to: '/group_search'},
@@ -200,8 +182,16 @@
             ],
         }),
         created() {
-            // axios.get('/getUser')
-            //     .then(res => res.data.avatar ? this.avatar = res.data.avatar : '')
+            window.onblur = () => {
+                console.log('документ неактивен');
+                this.window_focus = false;
+                console.log(this.window_focus);
+            };
+            window.onfocus = () => {
+                console.log('документ снова активен');
+                this.window_focus = true;
+                console.log(this.window_focus);
+            }
         },
         mounted() {
             VK.init({
@@ -268,5 +258,8 @@
 <style scoped>
     .v-btn {
         outline: none;
+    }
+    #nprogress {
+        height: 100px !important;
     }
 </style>

@@ -7,9 +7,10 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-header {
-    //height: 48px !important;
-    //.v-toolbar__content {
-    //    height: 48px;
-    //}
+#nprogress .bar {
+    background: #1158a9 !important;
+    height: 4px !important;
+}
+#nprogress .spinner {
+    display: none !important;
 }
