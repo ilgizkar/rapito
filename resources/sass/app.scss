@@ -3,6 +3,7 @@
 
 // Variables
 @import 'variables';
+@import "_mixins.scss";
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
@@ -13,4 +14,63 @@
 }
 #nprogress .spinner {
     display: none !important;
+}
+
+.enlarge {
+    .enlarge__header {
+        .enlarge__header_title {
+            color: $blue3;
+            @include breakpoint(w600){
+                font-size: 30px !important;
+            }
+        }
+        .enlarge__header_action {
+            a {
+                color: $white;
+                text-decoration: none;
+            }
+        }
+    }
+    .enlarge__card {
+        .title {
+            background-color: $blue2;
+            color: $blue3;
+        }
+        .enlarge__list {
+            min-height: 100px;
+            .list-item {
+                .list-icon {
+                    color: $blue3 !important;
+                }
+                .delete-icon {
+                    display: none;
+                    @include breakpoint(w600){
+                        display: block;
+                    }
+                }
+                .list-title {
+                    a {
+                        color:rgba(0,0,0,.87);
+                        &.hover {
+                            color: $blue3;
+                        }
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.v-divider {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+.like-icon {
+    color: $blue3 !important;
+    margin-bottom: 3px;
 }

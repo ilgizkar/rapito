@@ -37,6 +37,7 @@
                         </v-list-item>
                     </v-list-group>
                     <v-list-item
+                        class="navigation__list-item"
                         v-else
                         :key="item.text"
                         link
@@ -58,7 +59,7 @@
             :clipped-left="$vuetify.breakpoint.lgAndUp"
             app
             dense
-            color="#5181b8"
+            color="#4a76a8"
             dark
         >
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -82,13 +83,25 @@
                 class="hidden-sm-and-down shrink"
             ></v-text-field>
             <v-spacer></v-spacer>
+            <v-menu v-if="$store.state.user" offset-y>
+                <template v-slot:activator="{ on }">
+                    <v-btn title="Баланс" v-on="on" icon class="mr-2" :retain-focus-on-click="true">
+                        <v-icon class="mr-2" :size="26">mdi-heart-outline</v-icon><span style="font-size: 18px">{{ $store.state.balance }}</span>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item>
+                        <v-list-item-title>Пополнить баланс</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
             <v-btn icon class="mr-2">
                 <v-icon>mdi-apps</v-icon>
             </v-btn>
             <v-btn title="Уведомления" icon class="mr-2">
                 <v-icon>mdi-bell</v-icon>
             </v-btn>
-            <v-btn @click="vkAuth()" title="Войти" v-if="!user" icon class="mr-2">
+            <v-btn @click="vkAuth()" title="Войти" v-if="!$store.state.user" icon class="mr-2">
                 <v-icon :size="30">mdi-account</v-icon>
             </v-btn>
             <v-menu v-else offset-y>
@@ -99,14 +112,14 @@
                         icon
                         large
                         v-on="on"
-                        :title="user.first_name + ' ' + user.last_name"
+                        :title="$store.state.user.first_name + ' ' + $store.state.user.last_name"
                     >
                         <v-avatar
                             size="37px"
                             item
                         >
                             <v-img
-                                :src="user.photo_200 ? user.photo_200 : 'https://vk.com/images/camera_200.png?ava=1'"
+                                :src="$store.state.user.photo_200 ? $store.state.user.photo_200 : 'https://vk.com/images/camera_200.png?ava=1'"
                             ></v-img></v-avatar>
                     </v-btn>
                 </template>
@@ -136,9 +149,8 @@
         data: () => ({
             dialog: false,
             drawer: null,
+            avatar: null,
             vk_session: null,
-            window_focus: null,
-            user: null,
             userItems: [
                 { title: 'Профиль', click: 'logoutUser' },
                 { title: 'Баланс', click: 'logoutUser' },
@@ -182,16 +194,15 @@
             ],
         }),
         created() {
-            window.onblur = () => {
-                console.log('документ неактивен');
-                this.window_focus = false;
-                console.log(this.window_focus);
-            };
-            window.onfocus = () => {
-                console.log('документ снова активен');
-                this.window_focus = true;
-                console.log(this.window_focus);
-            }
+            $(window).on('click', (e) => {
+                if((window.screen.width < 1264) && (this.drawer === true)) {
+                    let item_class = e.target.classList[0];
+                    let item_class_length = $('.v-navigation-drawer').find('.' + item_class).length;
+                    if(item_class_length === 0) {
+                        this.drawer = false
+                    }
+                }
+            })
         },
         mounted() {
             VK.init({
@@ -199,10 +210,10 @@
             });
             this.vk_session = VK.Auth.getSession();
             if(this.vk_session) {
-                this.getUser(this.vk_session.mid);
+                this.$store.commit('addUser', this.vk_session.mid);
             }
+
             console.log(this.vk_session)
-            // console.log(vk_session.mid)
         },
         methods: {
             vkAuth() {
@@ -212,7 +223,7 @@
                         if (response.status === 'connected') {
                             console.log('авторизация прошла успешно');
                             this.vk_session = response.session;
-                            this.getUser(response.session.user.id);
+                            this.$store.commit('addUser', response.session.user.id);
                         } else if (response.status === 'not_authorized') {
                             console.log('пользователь авторизован в ВКонтакте, но не разрешил доступ приложению')
                         } else if (response.status === 'unknown') {
@@ -232,7 +243,7 @@
                 VK.Auth.logout(
                     (response) => {
                         if(response.session == null){
-                            this.user = '';
+                            this.$store.commit('addUser');
                             this.vk_session = '';
                         }
                     }
